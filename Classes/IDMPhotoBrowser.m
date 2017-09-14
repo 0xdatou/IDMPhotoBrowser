@@ -141,6 +141,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 @synthesize usePopAnimation = _usePopAnimation;
 @synthesize disableVerticalSwipe = _disableVerticalSwipe;
 @synthesize dismissOnTouch = _dismissOnTouch;
+@synthesize ignoredInitalIndexProcessing = _ignoredInitalIndexProcessing;
 @synthesize actionsSheet = _actionsSheet, activityViewController = _activityViewController;
 @synthesize trackTintColor = _trackTintColor, progressTintColor = _progressTintColor;
 @synthesize delegate = _delegate;
@@ -178,6 +179,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 		
 		_dismissOnTouch = NO;
 
+        _ignoredInitalIndexProcessing = YES;
+        
         _useWhiteBackgroundColor = NO;
         _leftArrowImage = _rightArrowImage = _leftArrowSelectedImage = _rightArrowSelectedImage = nil;
 
@@ -285,8 +288,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
         firstX = [scrollView center].x;
         firstY = [scrollView center].y;
-
-        _senderViewForAnimation.hidden = (_currentPageIndex == _initalPageIndex);
+        
+        
+        _senderViewForAnimation.hidden = !_ignoredInitalIndexProcessing && (_currentPageIndex == _initalPageIndex);
 
         _isdraggingPhoto = YES;
         [self setNeedsStatusBarAppearanceUpdate];
@@ -306,7 +310,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
         if(scrollView.center.y > viewHalfHeight+40 || scrollView.center.y < viewHalfHeight-40) // Automatic Dismiss View
         {
-            if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+            if (!_ignoredInitalIndexProcessing && _senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
                 [self performCloseAnimationWithScrollView:scrollView];
                 return;
             }
@@ -376,7 +380,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     resizableImageView.contentMode = _senderViewForAnimation ? _senderViewForAnimation.contentMode : UIViewContentModeScaleAspectFill;
     resizableImageView.backgroundColor = [UIColor clearColor];
     [_applicationWindow addSubview:resizableImageView];
-    _senderViewForAnimation.hidden = YES;
+
+    _senderViewForAnimation.hidden = !_ignoredInitalIndexProcessing;
 
     void (^completion)() = ^() {
         self.view.alpha = 1.0f;
@@ -1299,7 +1304,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [_delegate willDisappearPhotoBrowser:self];
     }
 
-    if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+    if (!_ignoredInitalIndexProcessing && _senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
         IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
         [self performCloseAnimationWithScrollView:scrollView];
     }

@@ -33,6 +33,10 @@
 // methods returns nil.
 - (UIImage *)underlyingImage;
 
+// Return placeholder UIImage to be displayed while loading underlyingImage
+// Return nil if there is no placeholder
+- (UIImage *)placeholderImage;
+
 // Called when the browser has determined the underlying images is not
 // already loaded into memory but needs it.
 // You must load the image asyncronously (and decompress it for better performance).
@@ -56,9 +60,5 @@
 // Return a caption string to be displayed over the image
 // Return nil to display no caption
 - (NSString *)caption;
-
-// Return placeholder UIImage to be displayed while loading underlyingImage
-// Return nil if there is no placeholder
-- (UIImage *)placeholderImage;
 
 @end

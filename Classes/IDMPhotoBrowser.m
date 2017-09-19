@@ -19,8 +19,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 // Private
 @interface IDMPhotoBrowser () {
-	// Data
-    NSMutableArray *_photos;
 
 	// Views
 	UIScrollView *_pagingScrollView;
@@ -53,8 +51,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     //UIStatusBarStyle _previousStatusBarStyle;
 	BOOL _statusBarOriginallyHidden;
 
-    // Present
-    UIView *_senderViewForAnimation;
 
     // Misc
     BOOL _performingLayout;
@@ -907,7 +903,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 			return [photo underlyingImage];
 		} else {
             [photo loadUnderlyingImageAndNotify];
-            if ([photo respondsToSelector:@selector(placeholderImage)]) {
+            if ([photo placeholderImage]) {
                 return [photo placeholderImage];
             }
 		}

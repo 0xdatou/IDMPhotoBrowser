@@ -32,7 +32,11 @@
 @interface IDMPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate>
 
 // Properties
-@property (nonatomic, strong) id <IDMPhotoBrowserDelegate> delegate;
+@property (nonatomic, weak) id <IDMPhotoBrowserDelegate> delegate;
+
+// Data Model
+@property (nonatomic, copy) NSMutableArray<IDMPhoto *> *photos;
+
 
 // Toolbar customization
 @property (nonatomic) BOOL displayToolbar;
@@ -53,6 +57,9 @@
 @property (nonatomic, assign) CGSize doneButtonSize;
 
 @property (nonatomic, weak) UIImage *scaleImage;
+
+// Present
+@property (nonatomic, strong) UIView *senderViewForAnimation;
 
 @property (nonatomic) BOOL arrowButtonsChangePhotosAnimated;
 
@@ -91,8 +98,5 @@
 
 // Set page that photo browser starts on
 - (void)setInitialPageIndex:(NSUInteger)index;
-
-// Get IDMPhoto at index
-- (id<IDMPhoto>)photoAtIndex:(NSUInteger)index;
 
 @end
